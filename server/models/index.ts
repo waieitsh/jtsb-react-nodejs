@@ -43,22 +43,25 @@ fs.readdirSync(__dirname)
             file.slice(-3) === '.js'
         );
     })
-    .forEach(async function (file) {
+    .forEach(function (file) {
         const url = pathToFileURL(path.join(__dirname, file)).toString();
-        const models = await import(url);
-        const modelName = file.split('.')[0];
-
-        database[models[modelName](sequelize).name] = models[modelName];
+        import(url)
+            .then(function (models) {
+                const modelName = file.split('.')[0];
+                const model = models[modelName](sequelize);
+                database[model.name] = model;
+            })
+            .then(function () {
+                Object.keys(database).forEach(function (modelName) {
+                    if (database[modelName].associate) {
+                        database[modelName].associate(database);
+                    }
+                });
+            });
     });
-
-Object.keys(database).forEach(function (modelName) {
-    if (database[modelName].associate) {
-        database[modelName].associate(database);
-    }
-});
 
 database.sequelize = sequelize;
 database.Sequelize = Sequelize;
 
-export { sequelize };
+export { database, sequelize };
 export type { IModels };
