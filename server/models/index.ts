@@ -35,30 +35,33 @@ const sequelize = new Sequelize(
     },
 );
 
-fs.readdirSync(__dirname)
-    .filter(function (file) {
-        return (
-            file.indexOf('.') !== 0 &&
-            file !== basename &&
-            file.slice(-3) === '.js'
-        );
-    })
-    .forEach(function (file) {
-        const url = pathToFileURL(path.join(__dirname, file)).toString();
-        import(url)
-            .then(function (models) {
-                const modelName = file.split('.')[0];
+const resolver = new Promise(function (resolve) {
+    fs.readdirSync(__dirname)
+        .filter(function (file) {
+            return (
+                file.indexOf('.') !== 0 &&
+                file !== basename &&
+                file.slice(-3) === '.js'
+            );
+        })
+        .forEach(function (file) {
+            const url = pathToFileURL(path.join(__dirname, file)).toString();
+            const modelName = file.split('.')[0];
+            import(url).then(function (models) {
                 const model = models[modelName](sequelize);
                 database[model.name] = model;
-            })
-            .then(function () {
-                Object.keys(database).forEach(function (modelName) {
-                    if (database[modelName].associate) {
-                        database[modelName].associate(database);
-                    }
-                });
+                resolve(database);
             });
+        });
+});
+
+resolver.then(function () {
+    Object.keys(database).forEach(function (modelName) {
+        if (database[modelName].associate) {
+            database[modelName].associate(database);
+        }
     });
+});
 
 database.sequelize = sequelize;
 database.Sequelize = Sequelize;
