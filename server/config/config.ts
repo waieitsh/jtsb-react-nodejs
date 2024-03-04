@@ -1,22 +1,37 @@
 'use strict';
 
-import path from 'path';
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
+import { Dialect } from 'sequelize';
 
-dotenv.config({
-    path: path.resolve(
-        __dirname + '/../../.env',
-        `.${process.env.NODE_ENV}.env`,
-    ),
-});
+dotenv.config();
 
-const config = {
-    database_username: process.env.DATABASE_USERNAME,
-    database_password: process.env.DATABASE_PASSWORD,
-    database_name: process.env.DATABASE_NAME,
-    database_host: process.env.DATABASE_HOST,
-    database_port: process.env.DATABASE_PORT,
-    dialect: 'postgres',
+interface IReturnTypes {
+    username: string;
+    password: string;
+    database: string;
+    host: string;
+    port: number;
+    dialect: Dialect;
+}
+
+interface IConfig {
+    [key: string]: IReturnTypes;
+    development: IReturnTypes;
+}
+
+const _config: IConfig = {
+    development: {
+        username: process.env.DATABASE_USERNAME as string,
+        password: process.env.DATABASE_PASSWORD as string,
+        database: process.env.DATABASE_NAME as string,
+        host: process.env.DATABASE_HOST as string,
+        port: Number(process.env.DATABASE_PORT),
+        dialect: 'postgres',
+    },
 };
 
-export default config;
+function config(env: keyof IConfig): IReturnTypes {
+    return _config[env];
+}
+
+export { config };
