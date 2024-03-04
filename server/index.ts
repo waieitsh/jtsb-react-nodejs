@@ -1,8 +1,8 @@
 'use strict';
 
 import express from 'express';
-import router from './router/signup';
-import { sequelize } from './models/index';
+import router from './router/signup.js';
+import { sequelize } from './models/index.js';
 
 const app = express();
 const port = 5000;
