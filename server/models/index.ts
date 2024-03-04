@@ -2,30 +2,33 @@
 
 import fs from 'fs';
 import path from 'path';
-import config from '../config/config';
 import { pathToFileURL } from 'node:url';
-const { Sequelize, Model } = require('sequelize');
-const basename = path.basename(__filename);
+import { Sequelize } from 'sequelize';
+import { config } from '../config/config.js';
+const basename = path.basename(path.resolve('dist/models/index.js'));
+const __dirname = path.resolve('dist/models');
+const env = process.env.NODE_ENV || 'development';
+
+const _config = config(env);
 
 interface IDatabase {
-    [key: string]: typeof Model;
-    sequelize: typeof Sequelize;
+    [key: string]: any;
 }
 
 interface IModels {
-    [key: string]: typeof Model;
+    [key: string]: any;
 }
 
 const database = {} as IDatabase;
 
 const sequelize = new Sequelize(
-    config.database_name,
-    config.database_username,
-    config.database_password,
+    _config.database,
+    _config.username,
+    _config.password,
     {
-        host: config.database_host,
-        dialect: config.dialect,
-        port: config.database_port,
+        host: _config.host,
+        dialect: _config.dialect,
+        port: _config.port,
         pool: {
             max: 5,
             min: 0,
@@ -48,10 +51,10 @@ const resolver = new Promise(function (resolve) {
             const url = pathToFileURL(path.join(__dirname, file)).toString();
             const modelName = file.split('.')[0];
             import(url).then(function (models) {
-                const model = models[modelName](sequelize);
+                const model = models[modelName](database.sequelize);
                 database[model.name] = model;
-                resolve(database);
             });
+            resolve(database);
         });
 });
 
@@ -67,4 +70,4 @@ database.sequelize = sequelize;
 database.Sequelize = Sequelize;
 
 export { database, sequelize };
-export type { IModels };
+export type { IDatabase, IModels };
