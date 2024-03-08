@@ -69,4 +69,4 @@ SiteUser.sync({ force: true })
         console.log(`siteUser error = ${error}`);
     });
 
-module.exports = SiteUser;
+export default SiteUser;

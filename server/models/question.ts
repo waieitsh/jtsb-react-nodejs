@@ -67,4 +67,4 @@ Question.sync({ force: true })
         console.log(`question error = ${error}`);
     });
 
-module.exports = Question;
+export default Question;

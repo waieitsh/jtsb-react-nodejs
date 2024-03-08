@@ -1,9 +1,11 @@
 'use strict';
 
-import path from 'path';
 import { Sequelize } from 'sequelize';
 const env = process.env.NODE_ENV || 'development';
-import { config } from '../config/config';
+import { config } from '../config/config.js';
+import SiteUser from './siteUser.js';
+import Question from './question.js';
+import Answer from './answer.js';
 
 const _config = config[env];
 
@@ -25,20 +27,27 @@ const sequelize = new Sequelize(
 );
 
 interface Database {
-    [key: string]: { associate: (models: Database) => void };
+    [key: string]: (typeof SiteUser | typeof Question | typeof Answer) & {
+        associate: (models: Database) => void;
+    };
 }
 
 const database = {} as Database;
 
-const siteUser = require(path.join(__dirname, 'siteUser.js'));
-database[siteUser.name] = siteUser;
-const question = require(path.join(__dirname, 'question.js'));
-database[question.name] = question;
-const answer = require(path.join(__dirname, 'answer.js'));
-database[answer.name] = answer;
+import('./siteUser.js').then(function (value) {
+    database[value.default.name] = value.default;
+});
+
+import('./question.js').then(function (value) {
+    database[value.default.name] = value.default;
+});
+
+import('./answer.js').then(function (value) {
+    database[value.default.name] = value.default;
+});
 
 Object.keys(database).forEach(function (modelName) {
     database[modelName].associate(database);
 });
 
-export { sequelize, database };
+export { sequelize };

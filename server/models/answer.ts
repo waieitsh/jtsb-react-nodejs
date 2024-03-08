@@ -67,4 +67,4 @@ Answer.sync({ force: true })
         console.log(`answer error = ${error}`);
     });
 
-module.exports = Answer;
+export default Answer;
