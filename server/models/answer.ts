@@ -59,12 +59,8 @@ Answer.init(
     },
 );
 
-Answer.sync({ force: true })
-    .then(function (response: Model<any, any> | PromiseLike<void>) {
-        console.log(`answer then = ${response}`);
-    })
-    .catch(function (error: Error) {
-        console.log(`answer error = ${error}`);
-    });
+(async function () {
+    await Answer.sync({ force: true });
+})();
 
-export default Answer;
+export { Answer };

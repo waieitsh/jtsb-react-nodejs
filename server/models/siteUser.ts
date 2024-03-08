@@ -61,12 +61,8 @@ SiteUser.init(
     },
 );
 
-SiteUser.sync({ force: true })
-    .then(function (response: Model<any, any> | PromiseLike<void>) {
-        console.log(`siteUser then = ${response}`);
-    })
-    .catch(function (error: Error) {
-        console.log(`siteUser error = ${error}`);
-    });
+(async function () {
+    await SiteUser.sync({ force: true });
+})();
 
-export default SiteUser;
+export { SiteUser };

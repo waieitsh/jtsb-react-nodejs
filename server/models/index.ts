@@ -3,9 +3,9 @@
 import { Sequelize } from 'sequelize';
 const env = process.env.NODE_ENV || 'development';
 import { config } from '../config/config.js';
-import SiteUser from './siteUser.js';
-import Question from './question.js';
-import Answer from './answer.js';
+import { SiteUser } from './siteUser.js';
+import { Question } from './question.js';
+import { Answer } from './answer.js';
 
 const _config = config[env];
 
@@ -34,20 +34,18 @@ interface Database {
 
 const database = {} as Database;
 
-import('./siteUser.js').then(function (value) {
-    database[value.default.name] = value.default;
-});
+(async function () {
+    const siteUser = await import('./siteUser.js');
+    const question = await import('./question.js');
+    const answer = await import('./answer.js');
 
-import('./question.js').then(function (value) {
-    database[value.default.name] = value.default;
-});
+    database[siteUser.SiteUser.name] = siteUser.SiteUser;
+    database[question.Question.name] = question.Question;
+    database[answer.Answer.name] = answer.Answer;
 
-import('./answer.js').then(function (value) {
-    database[value.default.name] = value.default;
-});
-
-Object.keys(database).forEach(function (modelName) {
-    database[modelName].associate(database);
-});
+    Object.keys(database).forEach(function (modelName) {
+        database[modelName].associate(database);
+    });
+})();
 
 export { sequelize };

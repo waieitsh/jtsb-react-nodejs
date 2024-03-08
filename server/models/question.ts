@@ -59,12 +59,8 @@ Question.init(
     },
 );
 
-Question.sync({ force: true })
-    .then(function (response: Model<any, any> | PromiseLike<void>) {
-        console.log(`question then = ${response}`);
-    })
-    .catch(function (error: Error) {
-        console.log(`question error = ${error}`);
-    });
+(async function () {
+    await Question.sync({ force: true });
+})();
 
-export default Question;
+export { Question };
