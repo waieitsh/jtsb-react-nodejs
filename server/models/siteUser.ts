@@ -1,24 +1,44 @@
 'use strict';
 
-import { IDatabase, IModels } from './index.js';
-import { BuildOptions, DataTypes, Model } from 'sequelize';
+import { sequelize } from './index.js';
+import {
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    ModelStatic,
+} from 'sequelize';
 
-interface siteUserInstance extends Model {
-    id: number;
-    subject: string;
-    author: string;
+interface Models {
+    [key: string]: ModelStatic<
+        Model<InferAttributes<SiteUser>, InferCreationAttributes<SiteUser>>
+    >;
 }
 
-type siteUserStatic = typeof Model & {
-    associate: (models: IModels) => void;
-} & {
-    new (values?: object, options?: BuildOptions): siteUserInstance;
-};
+class SiteUser extends Model<
+    InferAttributes<SiteUser>,
+    InferCreationAttributes<SiteUser>
+> {
+    declare id: number | null;
+    declare username: string;
+    declare password: string;
+    declare email: string;
 
-const siteUser = function (sequelize: IDatabase) {
-    const siteUser = <siteUserStatic>sequelize.define('site_user', {
+    static associate(models: Models) {
+        SiteUser.hasMany(models.question, {
+            foreignKey: 'author_id',
+        });
+
+        SiteUser.hasMany(models.answer, {
+            foreignKey: 'author_id',
+        });
+    }
+}
+
+SiteUser.init(
+    {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
@@ -34,23 +54,21 @@ const siteUser = function (sequelize: IDatabase) {
             type: DataTypes.STRING,
             unique: true,
         },
+    },
+    {
+        sequelize,
+        modelName: 'site_user',
+        schema: 'public',
+        underscored: true,
+    },
+);
+
+SiteUser.sync({ force: true })
+    .then(function (response: Model<any, any> | PromiseLike<void>) {
+        console.log(`siteUser then = ${response}`);
+    })
+    .catch(function (error: Error) {
+        console.log(`siteUser error = ${error}`);
     });
 
-    siteUser.associate = function (models: IModels) {
-        siteUser.hasMany(models.answer);
-        // siteUser.hasMany(models.question, { foreignKey: 'id', as: 'question_id' });
-    };
-
-    siteUser
-        .sync({ force: true })
-        .then(function (response: any) {
-            console.log(`siteUser then = ${response}`);
-        })
-        .catch(function (error: Error) {
-            console.log(`siteUser error = ${error}`);
-        });
-
-    return siteUser;
-};
-
-export { siteUser };
+module.exports = SiteUser;

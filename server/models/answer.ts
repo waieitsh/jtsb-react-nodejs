@@ -1,23 +1,44 @@
 'use strict';
 
-import { IDatabase, IModels } from './index.js';
-import { BuildOptions, DataTypes, Model } from 'sequelize';
+import { sequelize } from './index.js';
+import {
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    ModelStatic,
+} from 'sequelize';
 
-interface answerInstance extends Model {
-    id: number;
-    content: string;
-    author: string;
-    user_id: number;
+interface Models {
+    [key: string]: ModelStatic<
+        Model<InferAttributes<Answer>, InferCreationAttributes<Answer>>
+    >;
 }
 
-type answerStatic = typeof Model & { associate: (models: IModels) => void } & {
-    new (values?: object, options?: BuildOptions): answerInstance;
-};
+class Answer extends Model<
+    InferAttributes<Answer>,
+    InferCreationAttributes<Answer>
+> {
+    declare id: number | null;
+    declare content: string;
+    declare author_id: number;
+    declare question_id: number;
 
-const answer = function (sequelize: IDatabase) {
-    const answer = <answerStatic>sequelize.define('answer', {
+    static associate(models: Models) {
+        Answer.belongsTo(models.question, {
+            foreignKey: 'question_id',
+        });
+
+        Answer.belongsTo(models.site_user, {
+            foreignKey: 'author_id',
+        });
+    }
+}
+
+Answer.init(
+    {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
@@ -25,34 +46,27 @@ const answer = function (sequelize: IDatabase) {
         content: {
             type: DataTypes.TEXT,
         },
-        author: {
-            type: DataTypes.STRING,
+        author_id: {
+            type: DataTypes.INTEGER,
         },
-        user_id: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
-            references: {
-                model: 'site_user',
-                key: 'id',
-            },
+        question_id: {
+            type: DataTypes.INTEGER,
         },
+    },
+    {
+        sequelize,
+        modelName: 'answer',
+        schema: 'public',
+        underscored: true,
+    },
+);
+
+Answer.sync({ force: true })
+    .then(function (response: Model<any, any> | PromiseLike<void>) {
+        console.log(`answer then = ${response}`);
+    })
+    .catch(function (error: Error) {
+        console.log(`answer error = ${error}`);
     });
 
-    answer.associate = function (models: IModels) {
-        // answer.belongsTo(models.site_user, { foreignKey: 'user_id' });
-        // answer.belongsTo(models.question, { foreignKey: 'id', as: 'question_id' });
-    };
-
-    answer
-        .sync({ force: true })
-        .then(function (response: any) {
-            console.log(`answer then = ${response}`);
-        })
-        .catch(function (error: Error) {
-            console.log(`answer error = ${error}`);
-        });
-
-    return answer;
-};
-
-export { answer };
+module.exports = Answer;
