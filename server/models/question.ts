@@ -10,9 +10,7 @@ import {
 } from 'sequelize';
 
 interface Models {
-    [key: string]: ModelStatic<
-        Model<InferAttributes<Question>, InferCreationAttributes<Question>>
-    >;
+    [key: string]: ModelStatic<Model<any, any>>;
 }
 
 class Question extends Model<
