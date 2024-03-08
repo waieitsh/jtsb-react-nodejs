@@ -9,7 +9,7 @@
     },
     "author": "",
     "license": "ISC",
-    "type": "commonjs",
+    "type": "module",
     "devDependencies": {
         "@types/dotenv": "^8.2.0",
         "@types/express": "^4.17.21",
