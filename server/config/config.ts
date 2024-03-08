@@ -8,7 +8,7 @@ dotenv.config();
 interface Config {
     [key: string]: {
         username: string;
-        password: string;
+        password: string | undefined;
         database: string;
         host: string | undefined;
         port: number | undefined;
