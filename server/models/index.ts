@@ -1,11 +1,11 @@
 'use strict';
 
 import { Sequelize } from 'sequelize';
-const env = process.env.NODE_ENV || 'development';
 import { config } from '../config/config.js';
 import { SiteUser } from './siteUser.js';
 import { Question } from './question.js';
 import { Answer } from './answer.js';
+const env = process.env.NODE_ENV || 'development';
 
 const _config = config[env];
 
