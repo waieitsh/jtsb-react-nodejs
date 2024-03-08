@@ -1,11 +1,11 @@
 'use strict';
 
-import express from 'express';
+import express, { Express } from 'express';
 import router from './router/signup.js';
 import { sequelize } from './models/index.js';
 
-const app = express();
-const port = 5000;
+const app: Express = express();
+const port: number = 5000;
 
 sequelize
     .authenticate()
