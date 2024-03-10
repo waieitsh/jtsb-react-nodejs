@@ -2,8 +2,8 @@
 
 import signup from './signup.js';
 
-const userController = {
+const controller = {
     signup: signup,
 };
 
-export { userController };
+export { controller };
