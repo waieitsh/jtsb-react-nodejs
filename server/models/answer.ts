@@ -60,7 +60,7 @@ Answer.init(
 );
 
 (async function () {
-    await Answer.sync({ force: true });
+    await Answer.sync({ force: false });
 })();
 
 export { Answer };

@@ -62,7 +62,7 @@ SiteUser.init(
 );
 
 (async function () {
-    await SiteUser.sync({ force: true });
+    await SiteUser.sync({ force: false });
 })();
 
 export { SiteUser };
