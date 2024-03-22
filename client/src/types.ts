@@ -1,19 +1,24 @@
-import { Dispatch, SetStateAction } from 'react';
-
 interface IQuestion {
-    first: IFirst[];
-    second: [
+    data: [
         {
-            totalElements: number;
-            number: number;
-            size: number;
-            isEmpty: boolean;
-            hasPrevious: boolean;
-            hasNext: boolean;
-            totalPages: number;
+            id: number;
+            subject: string;
+            content: string;
+            author_id: number;
+            createdAt: string;
+            updatedAt: string;
+            site_user: {
+                username: string;
+            };
+            answers: [
+                {
+                    content: string;
+                    question_id: number;
+                },
+            ];
         },
     ];
-    third: IAnswerListDetails[];
+    count: number;
 }
 
 interface IFirst {
@@ -55,11 +60,4 @@ interface IAnswerListDetails {
     size: number;
 }
 
-export type {
-    IQuestion,
-    IQuestionDetails,
-    IAnswer,
-    IBindingResult,
-    IFirst,
-    IAnswerListDetails,
-};
+export type { IQuestion, IQuestionDetails, IAnswer, IBindingResult, IFirst, IAnswerListDetails };
