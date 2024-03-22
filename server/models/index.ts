@@ -9,22 +9,17 @@ const env = process.env.NODE_ENV || 'development';
 
 const _config = config[env];
 
-const sequelize = new Sequelize(
-    _config.database,
-    _config.username,
-    _config.password,
-    {
-        host: _config.host,
-        dialect: _config.dialect,
-        port: _config.port,
-        pool: {
-            max: 5,
-            min: 0,
-            acquire: 30000,
-            idle: 10000,
-        },
+const sequelize = new Sequelize(_config.database, _config.username, _config.password, {
+    host: _config.host,
+    dialect: _config.dialect,
+    port: _config.port,
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000,
     },
-);
+});
 
 interface Database {
     [key: string]: (typeof SiteUser | typeof Question | typeof Answer) & {

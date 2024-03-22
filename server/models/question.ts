@@ -1,22 +1,13 @@
 'use strict';
 
 import { sequelize } from './index.js';
-import {
-    DataTypes,
-    InferAttributes,
-    InferCreationAttributes,
-    Model,
-    ModelStatic,
-} from 'sequelize';
+import { DataTypes, InferAttributes, InferCreationAttributes, Model, ModelStatic } from 'sequelize';
 
 interface Models {
     [key: string]: ModelStatic<Model<any, any>>;
 }
 
-class Question extends Model<
-    InferAttributes<Question>,
-    InferCreationAttributes<Question>
-> {
+class Question extends Model<InferAttributes<Question>, InferCreationAttributes<Question>> {
     declare id: number | null;
     declare subject: string;
     declare content: string;

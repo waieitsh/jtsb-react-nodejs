@@ -1,22 +1,13 @@
 'use strict';
 
 import { sequelize } from './index.js';
-import {
-    DataTypes,
-    InferAttributes,
-    InferCreationAttributes,
-    Model,
-    ModelStatic,
-} from 'sequelize';
+import { DataTypes, InferAttributes, InferCreationAttributes, Model, ModelStatic } from 'sequelize';
 
 interface Models {
     [key: string]: ModelStatic<Model<any, any>>;
 }
 
-class SiteUser extends Model<
-    InferAttributes<SiteUser>,
-    InferCreationAttributes<SiteUser>
-> {
+class SiteUser extends Model<InferAttributes<SiteUser>, InferCreationAttributes<SiteUser>> {
     declare id: number | null;
     declare username: string;
     declare password: string;
