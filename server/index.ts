@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import router from './router/signup.js';
+import router from './router/index.js';
 import { sequelize } from './models/index.js';
 import cors from 'cors';
 
@@ -21,6 +21,7 @@ sequelize
     });
 
 app.use('/user', router);
+app.use('/question', router);
 
 app.listen(port, function () {
     console.log(`The server is running on http://localhost:${port}`);

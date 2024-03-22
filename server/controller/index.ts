@@ -1,9 +1,14 @@
 'use strict';
 
 import signup from './signup.js';
+import questionList from './questionList.js';
 
-const controller = {
+const userController = {
     signup: signup,
 };
 
-export { controller };
+const questionController = {
+    questionList: questionList,
+};
+
+export { userController, questionController };
