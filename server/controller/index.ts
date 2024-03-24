@@ -1,14 +1,15 @@
 'use strict';
 
-import signup from './signup.js';
-import questionList from './questionList.js';
+import { signup, login } from './userController.js';
+import { list } from './questionController.js';
 
 const userController = {
     signup: signup,
+    login: login,
 };
 
 const questionController = {
-    questionList: questionList,
+    list: list,
 };
 
 export { userController, questionController };

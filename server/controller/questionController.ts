@@ -6,7 +6,7 @@ import { Op } from 'sequelize';
 import { SiteUser } from '../models/siteUser.js';
 import { Answer } from '../models/answer.js';
 
-async function questionList(request: Request, response: Response) {
+async function list(request: Request, response: Response) {
     const { page } = request.query;
     const count = await Question.count();
     const limit: number = 10;
@@ -34,4 +34,4 @@ async function questionList(request: Request, response: Response) {
     return response.json({ data: question, count: count });
 }
 
-export default questionList;
+export { list };
