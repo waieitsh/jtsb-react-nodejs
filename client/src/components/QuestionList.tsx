@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { IQuestion } from '../types';
+import { Question } from '../types';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
 function QuestionList() {
     const [searchParams] = useSearchParams('');
     const param = Number(searchParams.get('page'));
-    const [questions, setQuestions] = useState<IQuestion>({} as IQuestion);
+    const [questions, setQuestions] = useState<Question>({} as Question);
     const [page, setPage] = useState<number>(param);
     const [totalPages, setTotalPages] = useState<number>(0);
 
@@ -90,7 +90,7 @@ function QuestionList() {
                     <span>이동</span>
                 </a>
             </div>
-            <a className="btn btn-primary" href={'/question/create'}>
+            <a className="btn btn-primary" href="/question/create">
                 질문 등록하기
             </a>
         </div>

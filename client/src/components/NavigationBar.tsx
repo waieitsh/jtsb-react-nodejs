@@ -16,18 +16,15 @@ function NavigationBar() {
                 >
                     <span className="navbar-toggler-icon" />
                 </button>
-                <div
-                    className="collapse navbar-collapse"
-                    id="navbarSupportedContent"
-                >
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link" href={'/user/login'}>
+                            <a className="nav-link" href="/user/login">
                                 로그인
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href={'/user/signup'}>
+                            <a className="nav-link" href="/user/signup">
                                 회원가입
                             </a>
                         </li>

@@ -1,60 +1,30 @@
-import React, { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import { BindingResult } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [tokenReady, setTokenReady] = useState<boolean>(false);
+    const [bindingResult, setBindingResult] = useState<BindingResult>({} as BindingResult);
+    const navigate = useNavigate();
 
-    function requestToken() {
+    function requestLogin() {
         axios
-            .post(
-                `https://localhost:9000/token`,
-                {
-                    username: username,
-                    password: password,
-                },
-                { withCredentials: true },
-            )
+            .post(`http://localhost:5000/user/login`, { username: username, password: password })
             .then(function (response) {
-                console.log(
-                    `requestToken response >>>>>>>>>>>>>> ${response.data}`,
-                );
-                setTokenReady(!tokenReady);
+                localStorage.setItem('token', response.data.token as string);
+                localStorage.setItem('username', btoa(username));
+                navigate('/');
             })
             .catch(function (error) {
-                console.log(
-                    `oauth2/token error >>>>>>>>>>> ${JSON.stringify(
-                        error.response.msg,
-                    )}`,
-                );
+                setBindingResult(error.response.data);
             });
-    }
-
-    function loginRequest() {
-        requestToken();
-
-        if (tokenReady) {
-            axios
-                .post(`https://localhost:8080/user/login`, null, {
-                    withCredentials: true,
-                })
-                .then(function (response) {
-                    console.log(`response >>>>> ${JSON.stringify(response)}`);
-                })
-                .catch(function (error) {
-                    console.log(`error >>>>> ${JSON.stringify(error)}`);
-                });
-        }
     }
 
     return (
         <div className="container my-3">
-            {/*<div th:if="${param.error}">
-                    <div className="alert alert-danger">
-                        사용자ID 또는 비밀번호를 확인해 주세요.
-                    </div>
-                </div>*/}
+            <div className={bindingResult.message ? 'alert alert-danger' : undefined}>{bindingResult.message}</div>
             <div className="mb-3">
                 <label htmlFor="username" className="form-label">
                     사용자ID
@@ -64,9 +34,7 @@ function LoginForm() {
                     name="username"
                     id="username"
                     className="form-control"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setUsername(e.target.value)
-                    }
+                    onChange={(e) => setUsername(e.target.value)}
                 />
             </div>
             <div className="mb-3">
@@ -78,17 +46,10 @@ function LoginForm() {
                     name="password"
                     id="password"
                     className="form-control"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setPassword(e.target.value)
-                    }
+                    onChange={(e) => setPassword(e.target.value)}
                 />
             </div>
-            <input
-                type="submit"
-                value="로그인"
-                className="btn btn-primary"
-                onClick={loginRequest}
-            />
+            <input type="submit" value="로그인" className="btn btn-primary" onClick={requestLogin} />
         </div>
     );
 }

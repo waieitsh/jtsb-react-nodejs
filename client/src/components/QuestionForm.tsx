@@ -1,20 +1,18 @@
 import axios from 'axios';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IBindingResult } from '../types';
+import { BindingResult } from '../types';
 
 function QuestionForm() {
     const [subject, setSubject] = useState<string>('');
     const [content, setContent] = useState<string>('');
-    const [bindingResult, setBindingResult] = useState<IBindingResult>(
-        {} as IBindingResult,
-    );
+    const [bindingResult, setBindingResult] = useState<BindingResult>({} as BindingResult);
     const navigate = useNavigate();
 
     function createQuestion() {
         axios
             .post(
-                `https://localhost:8080/question/create`,
+                `http://localhost:5000/question/create`,
                 {
                     subject: subject,
                     content: content,
@@ -30,14 +28,10 @@ function QuestionForm() {
             });
     }
 
-    useEffect(function () {
-        console.log(`bindingResult >>>>>>>>>>>. ${bindingResult}`);
-    }, []);
-
     return (
         <div className="container">
             <h5 className="my-3 border-bottom pb-2">질문등록</h5>
-            <div
+            {/* <div
                 className={
                     bindingResult.SUBJECT_REQUIRED !== null &&
                     bindingResult.SUBJECT_REQUIRED !== undefined
@@ -56,7 +50,7 @@ function QuestionForm() {
                 }
             >
                 {bindingResult.CONTENT_REQUIRED}
-            </div>
+            </div> */}
 
             <div className="mb-3">
                 <label htmlFor="subject" className="form-label">
@@ -67,9 +61,7 @@ function QuestionForm() {
                     name="subject"
                     id="subject"
                     className="form-control"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setSubject(e.target.value)
-                    }
+                    onChange={(e) => setSubject(e.target.value)}
                 />
             </div>
             <div className="mb-3">
@@ -81,17 +73,10 @@ function QuestionForm() {
                     id="content"
                     className="form-control"
                     rows={10}
-                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                        setContent(e.target.value)
-                    }
+                    onChange={(e) => setContent(e.target.value)}
                 />
             </div>
-            <input
-                type="submit"
-                value="저장하기"
-                className="btn btn-primary my-2"
-                onClick={createQuestion}
-            />
+            <input type="submit" value="저장하기" className="btn btn-primary my-2" onClick={createQuestion} />
         </div>
     );
 }
