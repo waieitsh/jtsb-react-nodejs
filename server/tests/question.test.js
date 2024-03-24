@@ -1,12 +1,15 @@
 import { SiteUser } from '../dist/models/siteUser';
 import { Question } from '../dist/models/question';
+import bcrypt from 'bcrypt';
 
 describe('create siteUser', function () {
     test('created siteUser', async function () {
-        await SiteUser.create({
-            username: 'test123',
-            password: 'test123',
-            email: 'test123@test.com',
+        bcrypt.hash('test123', 10, async function (error, hash) {
+            await SiteUser.create({
+                username: 'test123',
+                password: hash,
+                email: 'test123@test.com',
+            });
         });
     });
 });
