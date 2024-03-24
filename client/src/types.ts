@@ -1,4 +1,4 @@
-interface IQuestion {
+interface Question {
     data: [
         {
             id: number;
@@ -21,43 +21,32 @@ interface IQuestion {
     count: number;
 }
 
-interface IFirst {
+interface First {
     id: number;
     subject: string;
     content: string;
     createDate: string;
 }
 
-interface IQuestionDetails {
-    first: IFirst[];
-    second: IAnswer[];
+interface QuestionDetails {
+    first: First[];
+    second: Answer[];
 }
 
-interface IAnswer {
+interface Answer {
     id: number;
     content: string;
-    question?: IQuestion[];
+    question?: Question[];
     createDate: string;
 }
 
-interface IBindingResult {
-    SUBJECT_REQUIRED: string;
-    CONTENT_REQUIRED: string;
-    PASSWORD_NOT_MATCH: string;
-    USER_EXISTS: string;
-    USER_NOT_EXISTS: string;
-    DATA_NOT_EXISTS: string;
-    USERID_REQUIRED: string;
-    PASSWORD_REQUIRED: string;
-    PASSWORD_CONFIRM_REQUIRED: string;
-    EMAIL_REQUIRED: string;
-    EMAIL_FORM_VIOLATION: string;
-    USERID_RANGE_VIOLATION: string;
+interface BindingResult {
+    message: string;
 }
 
-interface IAnswerListDetails {
+interface AnswerListDetails {
     id: number;
     size: number;
 }
 
-export type { IQuestion, IQuestionDetails, IAnswer, IBindingResult, IFirst, IAnswerListDetails };
+export type { Question, QuestionDetails, Answer, BindingResult, First, AnswerListDetails };
