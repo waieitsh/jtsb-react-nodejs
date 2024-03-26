@@ -18,7 +18,7 @@ function QuestionList() {
                 })
                 .then(function (response) {
                     setQuestions(response.data);
-                    setTotalPages(response.data.count / 10);
+                    setTotalPages(Math.ceil(response.data.count / 10));
                 })
                 .catch(function (error) {
                     console.log(`error >> ${error}`);
