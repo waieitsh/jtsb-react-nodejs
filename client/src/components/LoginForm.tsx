@@ -1,26 +1,50 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BindingResult } from '../types';
 import { useNavigate } from 'react-router-dom';
+import { Buffer } from 'buffer';
 
 function LoginForm() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [bindingResult, setBindingResult] = useState<BindingResult>({} as BindingResult);
+    const [clicked, setClicked] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    function requestLogin() {
-        axios
-            .post(`http://localhost:5000/user/login`, { username: username, password: password })
-            .then(function (response) {
-                localStorage.setItem('token', response.data.token as string);
-                localStorage.setItem('username', btoa(username));
-                navigate('/');
-            })
-            .catch(function (error) {
-                setBindingResult(error.response.data);
-            });
-    }
+    useEffect(
+        function () {
+            if (clicked) {
+                axios
+                    .post(`http://localhost:5000/user/login`, { username: username, password: password })
+                    .then(function (response) {
+                        localStorage.setItem('token', response.data.token as string);
+                        localStorage.setItem('loginUser', Buffer.from(username).toString('base64'));
+                    })
+                    .then(function () {
+                        const token = localStorage.getItem('token') || '';
+
+                        axios
+                            .post(`http://localhost:5000/token/verifyToken`, { token: token })
+                            .then(function (response) {
+                                console.log(`response123 ==== ${JSON.stringify(response)}`);
+                                localStorage.setItem(
+                                    'sessionUser',
+                                    Buffer.from(response.data.username).toString('base64'),
+                                );
+                            })
+                            .catch(function (error) {
+                                console.log(`error ==== ${JSON.stringify(error)}`);
+                                setBindingResult(error.response.data);
+                            });
+                        navigate('/');
+                    })
+                    .catch(function (error) {
+                        setBindingResult(error.response.data);
+                    });
+            }
+        },
+        [clicked, username, password, navigate],
+    );
 
     return (
         <div className="container my-3">
@@ -49,7 +73,7 @@ function LoginForm() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </div>
-            <input type="submit" value="로그인" className="btn btn-primary" onClick={requestLogin} />
+            <input type="submit" value="로그인" className="btn btn-primary" onClick={() => setClicked(!clicked)} />
         </div>
     );
 }
