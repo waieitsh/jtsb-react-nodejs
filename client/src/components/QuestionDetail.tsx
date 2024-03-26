@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Answer, QuestionDetails } from '../types';
 import { BindingResult } from '../types';
 
-function QuestionDetails() {
+function QuestionDetail() {
     const { id } = useParams();
     const [content, setContent] = useState<string>('');
     const [bindingResult, setBindingResult] = useState<BindingResult>({} as BindingResult);
@@ -14,7 +14,7 @@ function QuestionDetails() {
     useEffect(
         function () {
             axios
-                .get(`https://localhost:8080/question/details/${id}`)
+                .get(`http://localhost:5000/question/details/${id}`)
                 .then(function (response) {
                     setQuestionDetails(response.data);
                 })
@@ -28,7 +28,7 @@ function QuestionDetails() {
     function submitAnswer() {
         axios
             .post(
-                `https://localhost:8080/answer/create/${id}`,
+                `http://localhost:5000/answer/create/${id}`,
                 {
                     content: content,
                 },
@@ -105,4 +105,4 @@ function QuestionDetails() {
     );
 }
 
-export default QuestionDetails;
+export default QuestionDetail;

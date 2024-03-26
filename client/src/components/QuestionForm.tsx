@@ -11,47 +11,25 @@ function QuestionForm() {
 
     function createQuestion() {
         axios
-            .post(
-                `http://localhost:5000/question/create`,
-                {
-                    subject: subject,
-                    content: content,
-                },
-                { withCredentials: true },
-            )
+            .post(`http://localhost:5000/question/create`, {
+                subject: subject,
+                content: content,
+                token: localStorage.getItem('token'),
+            })
             .then(function (response) {
                 navigate('/');
             })
             .catch(function (error) {
-                console.log(`error >> ${JSON.stringify(error.response)}`);
-                setBindingResult(error.response.data.message);
+                setBindingResult(error.response.data);
             });
     }
 
     return (
         <div className="container">
             <h5 className="my-3 border-bottom pb-2">질문등록</h5>
-            {/* <div
-                className={
-                    bindingResult.SUBJECT_REQUIRED !== null &&
-                    bindingResult.SUBJECT_REQUIRED !== undefined
-                        ? 'alert alert-danger'
-                        : undefined
-                }
-            >
-                {bindingResult.SUBJECT_REQUIRED}
+            <div className={bindingResult.message !== undefined ? 'alert alert-danger' : undefined}>
+                {bindingResult.message}
             </div>
-            <div
-                className={
-                    bindingResult.CONTENT_REQUIRED !== null &&
-                    bindingResult.CONTENT_REQUIRED !== undefined
-                        ? 'alert alert-danger'
-                        : undefined
-                }
-            >
-                {bindingResult.CONTENT_REQUIRED}
-            </div> */}
-
             <div className="mb-3">
                 <label htmlFor="subject" className="form-label">
                     제목
