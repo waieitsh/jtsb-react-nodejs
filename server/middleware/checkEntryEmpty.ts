@@ -19,7 +19,7 @@ function checkSingupEntryEmpty(request: Request, response: Response, next: NextF
     }
 }
 
-function checkLoginEntryEmtpry(request: Request, response: Response, next: NextFunction) {
+function checkLoginEntryEmpty(request: Request, response: Response, next: NextFunction) {
     const { username, password } = request.body;
 
     if (username === '') {
@@ -31,4 +31,16 @@ function checkLoginEntryEmtpry(request: Request, response: Response, next: NextF
     }
 }
 
-export { checkSingupEntryEmpty, checkLoginEntryEmtpry };
+function checkQuestionCreateEntryEmpty(request: Request, response: Response, next: NextFunction) {
+    const { subject, content } = request.body;
+
+    if (subject === '') {
+        return response.status(400).json({ message: '제목을 입력해 주세요' });
+    } else if (content === '') {
+        return response.status(400).json({ message: '내용을 입력해 주세요' });
+    } else {
+        next();
+    }
+}
+
+export { checkSingupEntryEmpty, checkLoginEntryEmpty, checkQuestionCreateEntryEmpty };
