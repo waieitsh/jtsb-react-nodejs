@@ -34,4 +34,17 @@ async function list(request: Request, response: Response) {
     return response.json({ data: question, count: count });
 }
 
-export { list };
+async function create(request: Request, response: Response) {
+    const { subject, content } = request.body;
+    const username = response.locals.username;
+
+    const siteUser = await SiteUser.findOne({ where: { username: username } });
+
+    await Question.create({
+        subject: subject,
+        content: content,
+        author_id: siteUser?.id as number,
+    });
+}
+
+export { list, create };
