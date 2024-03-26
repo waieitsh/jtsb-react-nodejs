@@ -22,6 +22,8 @@ sequelize
 
 app.use('/user', router);
 app.use('/question', router);
+app.use('/token', router)
+
 
 app.listen(port, function () {
     console.log(`The server is running on http://localhost:${port}`);

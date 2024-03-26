@@ -1,7 +1,8 @@
 'use strict';
 
 import { signup, login } from './userController.js';
-import { list } from './questionController.js';
+import { create, list } from './questionController.js';
+import { processToken } from './tokenController.js';
 
 const userController = {
     signup: signup,
@@ -10,6 +11,11 @@ const userController = {
 
 const questionController = {
     list: list,
+    create: create,
 };
 
-export { userController, questionController };
+const tokenController = {
+    processToken: processToken,
+};
+
+export { userController, questionController, tokenController };
