@@ -40,19 +40,17 @@ async function login(request: Request, response: Response) {
 
     const siteUser = await SiteUser.findOne({ where: { username: username } });
 
-    if (siteUser !== null) {
-        const _password = await bcrypt.compare(password, siteUser.password);
+    const _password = await bcrypt.compare(password, siteUser?.password as string);
 
-        if (_password) {
-            jwt.sign(
-                { iss: 'localhost', aud: username },
-                privateKey,
-                { algorithm: 'RS256', expiresIn: '1h' },
-                function (error, token) {
-                    return response.status(200).json({ message: 'LOGIN_SUCCEEDED', token: token });
-                },
-            );
-        }
+    if (_password) {
+        jwt.sign(
+            { iss: 'localhost', aud: username },
+            privateKey,
+            { algorithm: 'RS256', expiresIn: '1h' },
+            function (error, token) {
+                return response.status(200).json({ message: 'LOGIN_SUCCEEDED', token: token });
+            },
+        );
     }
 }
 
