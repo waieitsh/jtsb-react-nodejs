@@ -1,12 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
-import { Suspense, lazy, useEffect, useState } from 'react';
-import axios from 'axios';
-import { BindingResult } from './types';
+import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import QuestionList from './components/QuestionList';
-import { Buffer } from 'buffer';
 
 const QuestionDetail = lazy(() => import('./components/QuestionDetail'));
 const QuestionForm = lazy(() => import('./components/QuestionForm'));
